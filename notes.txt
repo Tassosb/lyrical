@@ -1,0 +1,25 @@
+input: all that json
+output:
+  stream graph
+  x-axis are years 1964-2015
+  y-axis is #occurrences of given word
+
+procedure:
+ input: a word
+ output: an object where the keys are the years, and the value is the word occurrences
+ example output: {
+  1956: {
+      count: 20,
+      max: { song: "wooly bully", count: 10 },
+    }
+  1966: {
+      count: 47,
+      max: { song: "funky stuff", count: 7 },
+    }
+  1967 {
+      count: 2,
+      max: { song: "fooly tooly", count: 2 },
+    }
+ }
+
+const output = {1965: { count: 0, max: null }, ... ,  2015: {count: 0, max: null } };
