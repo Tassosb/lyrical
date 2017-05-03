@@ -49,3 +49,14 @@ figure#graph {
   width: 960px;
   height: 500px;
 }
+
+.axis line {
+  fill: none;
+  stroke: none;
+}
+
+.axis line {}
+
+.axis text {
+  font-size: 16px;
+}

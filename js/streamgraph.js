@@ -9,7 +9,7 @@ class StreamGraph {
     this.width = options.width;
     this.height = options.height;
 
-    this.margin = options.margins || {
+    this.margin = options.margin || {
       top: 20,
       right: 75,
       bottom: 45,
@@ -36,7 +36,7 @@ class StreamGraph {
     .attr("fill", function() { return z(Math.random()); });
 
     this.plot = svg.append('g')
-        .attr('transform','translate('+this.margin.left+','+this.margin.top+')');
+        .attr('transform','translate(0,'+this.margin.top+')')
 
     this.addAxes();
   }
@@ -63,9 +63,14 @@ class StreamGraph {
   addAxes () {
     const m = this.margin;
 
+    const axisScale = d3.scaleLinear()
+      .domain([1965, 2015])
+      .range([m.left, this.width-m.right]);
+      // debugger
     var xAxis = d3.axisBottom()
-        .scale(this.xScale);
-        // .ticks(d3.time, 1965);
+        .scale(axisScale)
+        .ticks(10, "f")
+        .tickSizeOuter([0]);
 
     // var yAxis = d3.axisLeft();
     //     // .scale(this.yScale);
@@ -74,7 +79,7 @@ class StreamGraph {
 
     this.plot.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(" + -m.left + "," + (this.height-(m.top+m.bottom)) + ")")
+      .attr("transform", "translate(" + 7 + "," + (this.height-(m.top+m.bottom)) + ")")
       .call(xAxis);
 
     // this.plot.append("g")
