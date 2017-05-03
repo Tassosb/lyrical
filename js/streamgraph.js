@@ -18,7 +18,6 @@ class StreamGraph {
   }
 
   draw () {
-
     const svg = d3.select(this.el).append('svg');
     svg.attr('width',  this.width);
     svg.attr('height', this.height);

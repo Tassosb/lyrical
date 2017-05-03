@@ -44,6 +44,8 @@ form.search {
   width: 600px;
 }
 
-svg.graph {
+figure#graph {
   margin-top: 20px;
+  width: 960px;
+  height: 500px;
 }

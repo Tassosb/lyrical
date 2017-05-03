@@ -16,7 +16,9 @@ class WordCounter {
   }
 
   getCounts (word, asPercent = false) {
+    // if (!word) return this.startResults();
     const targets = this.expandTarget(word);
+    console.log(targets);
     if (asPercent) return this.asPercent(...targets);
 
     this.currentResults = this.allCounts(...targets);
@@ -25,7 +27,7 @@ class WordCounter {
 
   expandTarget(word) {
     const targets = [this.removePunctuation(word.toLowerCase())];
-    if (word.slice(0, -3).search(/[aeiou]/)) {
+    if (word.slice(0, -3).search(/[aeiou]/) >= 0) {
       if (word.slice(-3) === "ing") {
         targets.push(word.slice(0, -1));
       } else {

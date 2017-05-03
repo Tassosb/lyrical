@@ -1,16 +1,20 @@
 const WordCounter = require('./js/word_counter.js');
-const StreamGrapher = require('./js/streamgrapher.js');
+const StreamGraph = require('./js/streamgraph.js');
 
-const sg = new StreamGrapher();
 const wc = new WordCounter();
+const sg = new StreamGraph({
+  data: wc.getCounts("baby", true),
+  el: document.getElementById('graph'),
+  width: 960,
+  height: 500
+});
 
-sg.render(wc.getCounts("baby", true));
+sg.draw();
+
 const submit = document.querySelector("form.search");
-
 submit.addEventListener('submit', (e) => {
   e.preventDefault();
   const input = document.querySelector("input[name=search]");
   const counts = wc.getCounts(input.value, true);
-  console.log(counts);
-  sg.transition(counts);
+  sg.setData(counts);
 });
