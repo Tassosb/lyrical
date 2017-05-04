@@ -19,7 +19,7 @@ class WordCounter {
     // if (!word) return this.startResults();
     this.targets = this.expandTarget(word);
 
-    this.newCount();
+    this.current = this.newCount();
 
     const res = percent ? this.asPercent() : this.asTotals()
 
@@ -31,7 +31,7 @@ class WordCounter {
     if (word.slice(0, -3).search(/[aeiou]/) >= 0) {
       if (word.slice(-3) === "ing") {
         targets.push(word.slice(0, -1));
-      } else {
+      } else if (word.slice(-2) === "in") {
         targets.push(word + "g");
       }
     }
@@ -49,7 +49,6 @@ class WordCounter {
 
   newCount () {
     if (this.cache[this.targets[0]]) return this.cache[this.targets[0]];
-
     const results = this.startResults();
 
     lyricsData.forEach((song) => {
@@ -67,7 +66,7 @@ class WordCounter {
     });
 
     this.cache[this.targets[0]] = results;
-    this.current = results;
+    return results;
   }
 
   asTotals () {
@@ -91,6 +90,7 @@ class WordCounter {
   }
 
   wordsCount (words, targets) {
+    if (this.targets[0] === "") return 0;
     let count = 0;
     for (let i = 0; i < words.length; i++) {
       for (let j = 0; j < targets.length; j++) {
