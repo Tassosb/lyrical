@@ -5,23 +5,33 @@ class WordCounter {
   constructor () {
     this.cache = {};
     this.current = {};
+    this.includeMax = false;
+    this.percent = true;
+  }
+
+  count (word) {
+    if (word) { this.targets = this.expandTarget(word); }
+    this.current = this.newCount();
+
+    const res = this.percent ? this.asPercent() : this.asTotals();
+    return res;
+  }
+
+  toggleIncludeMax () {
+    this.includeMax = !this.includeMax;
+  }
+
+  togglePercent () {
+    this.percent = !this.percent;
   }
 
   startResults () {
     const results = {};
 
     for (let i = 1965; i < 2016; i++) {
-      results[i] = {count: 0.000001, max: null, total: 0};
+      results[i] = {count: 0.0000001, max: null, total: 0};
     }
     return results;
-  }
-
-  count (word, percent = false) {
-    this.targets = this.expandTarget(word);
-    this.current = this.newCount();
-
-    const res = percent ? this.asPercent() : this.asTotals();
-    return res;
   }
 
   expandTarget(word) {
@@ -57,20 +67,22 @@ class WordCounter {
   }
 
   asTotals () {
-    results = [];
-    for (let i = 1965; i < 2016; i++) {
-      let yr = this.current[i];
-      results.push({year: i, count: yr.count});
-    }
-
-    return results;
+    return this.asArray(false);
   }
 
-  asPercent (...targetWords) {
+  asPercent () {
+    return this.asArray(true);
+  }
+
+  asArray () {
     const results = [];
+
     for (let i = 1965; i < 2016; i++) {
       let yr = this.current[i];
-      results.push({year: i, count: yr.count / yr.total * 100});
+      let count = yr.count;
+      if (!this.includeMax) count -= yr.max.count;
+      if (this.percent) count /= (yr.total / 100);
+      results.push({year: i, count});
     }
 
     return results;

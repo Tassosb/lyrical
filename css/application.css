@@ -7,6 +7,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 h1.title {
@@ -79,4 +80,98 @@ h2.message {
 h2.message strong {
   font-weight:bolder;
   font-size: 26px;
+}
+
+.toggle {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.toggle span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.toggle-include {
+  background: rgb(227, 81, 50);
+  border-radius: 5px;
+  margin-right: 10px;
+  padding: 10px;
+  width: 50px;
+}
+
+.toggle .switch {
+  cursor: pointer;
+}
+
+.toggle .switch.including {
+  background: lightgreen;
+}
+
+.toggle-include span:first-of-type {
+  /*padding: 5px;*/
+  margin-right: 13px;
+}
+
+.toggle-percent {
+  background: rgb(50, 81, 227);
+  border-radius: 5px;
+  margin: 0 10px 10px 20px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.toggle-percent span {
+  padding: 7px;
+  color: white;
+}
+
+.toggle-percent span.selected {
+  background-color: white;
+  color: black;
+}
+
+.toggle-percent span:hover {
+  background-color: white;
+  cursor: pointer;
+  color: black;
+}
+
+span#percent {
+  margin-right: 5px;
+}
+
+.options {
+  width: 750px;
+  display: flex;
+  padding: 10px;
+  margin-top: 10px;
+  border-top: 1px solid rgb(200, 200, 200);
+}
+
+/* Toggle Button */
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+}
+
+.slider {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 5px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .7s;
+}
+
+.toggle-include.including .slider {
+  -webkit-transform: translateX(36px);
+  -ms-transform: translateX(36px);
+  transform: translateX(36px);
 }

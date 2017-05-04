@@ -7,6 +7,7 @@ class StreamGraph {
     this.data = options.data;
     this.width = options.width;
     this.height = options.height;
+    this.percent = options.percent;
 
     this.margin = options.margin || {
       top: 20,
@@ -59,7 +60,7 @@ class StreamGraph {
   }
 
   addAxes () {
-    d3.selectAll('g.axis').remove();
+    d3.selectAll('g.axis, text.label').remove();
     this.createAxes();
 
     const m = this.margin;
@@ -77,7 +78,13 @@ class StreamGraph {
     .attr("class", "y axis label")
     .attr("x", 0)
     .attr("y", (this.height-(m.top+m.bottom)) / 4)
-    .text("%");
+    .text((this.percent ? "%" : "#"));
+
+    this.plot.append("text")
+    .attr("class", "x axis label")
+    .attr("x", ((this.width-m.right) / 2))
+    .attr("y", (this.height - 25))
+    .text(("year"));
   }
 
   createLayers () {
@@ -95,6 +102,7 @@ class StreamGraph {
 
   createArea () {
     this.area = d3.area()
+    .curve(d3.curveCatmullRom.alpha(0.5))
     .x((d, i) =>  this.xScale(i))
     .y0((d) => this.yScale(d[0]))
     .y1((d) => this.yScale(d[1]));
