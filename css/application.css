@@ -21,17 +21,17 @@ h3.sub-title {
 }
 
 input[name=search] {
-  width: 400px;
+  flex: 4;
   font-size: 28px;
   padding: 15px;
 }
 
 input[type=submit] {
-  width: 120px;
+  flex: 1;
   font-size: 28px;
   padding: 15px;
+  margin-left: 10px;
   background: rgb(50, 81, 227);
-  /*border: 1px solid rgb(255, 255, 255);*/
   border-radius: 5px;
   color: white;
 }
@@ -42,6 +42,7 @@ input[type=submit]:hover {
 
 form.search {
   width: 600px;
+  display: flex;
 }
 
 figure#graph {
