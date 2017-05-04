@@ -1,4 +1,5 @@
 const lyricsData = require('../data/lyrics_no_punctuation.json');
+const removePunctuation = require('./util/remove_punctuation.js');
 
 class WordCounter {
   constructor () {
@@ -16,35 +17,21 @@ class WordCounter {
   }
 
   count (word, percent = false) {
-    // if (!word) return this.startResults();
     this.targets = this.expandTarget(word);
-
     this.current = this.newCount();
 
-    const res = percent ? this.asPercent() : this.asTotals()
-
+    const res = percent ? this.asPercent() : this.asTotals();
     return res;
   }
 
   expandTarget(word) {
-    const targets = [this.removePunctuation(word.toLowerCase())];
+    const targets = [removePunctuation(word.toLowerCase())];
     if (word.slice(0, -3).search(/[aeiou]/) >= 0) {
       if (word.slice(-3) === "ing") {
         targets.push(word.slice(0, -1));
-      } else if (word.slice(-2) === "in") {
-        targets.push(word + "g");
       }
     }
     return targets;
-  }
-
-  removePunctuation (string) {
-    let newString = "";
-    for (let i = 0; i < string.length; i++) {
-      if (string[i] === " " || (65 <= string[i].charCodeAt() && string[i].charCodeAt() <= 122))
-      newString += string[i];
-    }
-    return newString;
   }
 
   newCount () {
