@@ -11,13 +11,12 @@ main {
 
 h1.title {
   width: 100px;
-  font-size: 32px;
+  font-size: 42px;
   padding-top: 30px;
 }
 
 h3.sub-title {
-  padding: 10px;
-
+  padding: 15px;
 }
 
 input[name=search] {
@@ -59,4 +58,24 @@ figure#graph {
 
 .axis text {
   font-size: 16px;
+}
+
+.y.axis path {
+  fill: none;
+  stroke: none;
+}
+
+.y.axis text {
+  font-size: 12px;
+  color: rgb(20, 20, 20);
+}
+
+h2.message {
+  margin-top: 15px;
+  font-size: 24px;
+}
+
+h2.message strong {
+  font-weight:bolder;
+  font-size: 26px;
 }

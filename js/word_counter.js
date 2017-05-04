@@ -3,26 +3,27 @@ const lyricsData = require('../data/lyrics_no_punctuation.json');
 class WordCounter {
   constructor () {
     this.cache = {};
-    this.currentResults = {};
+    this.current = {};
   }
 
   startResults () {
     const results = {};
 
     for (let i = 1965; i < 2016; i++) {
-      results[i] = {count: 0, max: null, total: 0};
+      results[i] = {count: 0.000001, max: null, total: 0};
     }
     return results;
   }
 
-  getCounts (word, asPercent = false) {
+  count (word, percent = false) {
     // if (!word) return this.startResults();
-    const targets = this.expandTarget(word);
-    console.log(targets);
-    if (asPercent) return this.asPercent(...targets);
+    this.targets = this.expandTarget(word);
 
-    this.currentResults = this.allCounts(...targets);
-    return this.currentResults;
+    this.newCount();
+
+    const res = percent ? this.asPercent() : this.asTotals()
+
+    return res;
   }
 
   expandTarget(word) {
@@ -46,15 +47,15 @@ class WordCounter {
     return newString;
   }
 
-  allCounts (...targetWords) {
-    if (this.cache[targetWords[0]]) return this.cache[targetWords[0]];
+  newCount () {
+    if (this.cache[this.targets[0]]) return this.cache[this.targets[0]];
 
     const results = this.startResults();
 
     lyricsData.forEach((song) => {
       const songWords = song.Lyrics.split(" ");
       const totalWordCount = parseInt(songWords.length);
-      const wordCount = this.wordsCount(songWords, targetWords);
+      const wordCount = this.wordsCount(songWords, this.targets);
       const curr = results[song.Year];
 
       if (!curr.max || curr.max.count < wordCount) {
@@ -65,19 +66,28 @@ class WordCounter {
       curr.total += totalWordCount;
     });
 
-    this.cache[targetWords[0]] = results;
+    this.cache[this.targets[0]] = results;
+    this.current = results;
+  }
+
+  asTotals () {
+    results = [];
+    for (let i = 1965; i < 2016; i++) {
+      let yr = this.current[i];
+      results.push({year: i, count: yr.count});
+    }
+
     return results;
   }
 
   asPercent (...targetWords) {
-    const results = this.allCounts(...targetWords);
-
-    const output = [];
+    const results = [];
     for (let i = 1965; i < 2016; i++) {
-      output.push(results[i].count / results[i].total * 100);
+      let yr = this.current[i];
+      results.push({year: i, count: yr.count / yr.total * 100});
     }
 
-    return output;
+    return results;
   }
 
   wordsCount (words, targets) {
