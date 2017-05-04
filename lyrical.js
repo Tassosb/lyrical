@@ -18,6 +18,6 @@ submit.addEventListener('submit', (e) => {
   const counts = wc.count(input.value, true);
   sg.setData(counts);
 
-  const message = `"${wc.targets.join("\", \"")}"`
-  document.querySelector("strong.search-terms").innerText = message
+  const message = `"${wc.targets.join("\", \"")}"`;
+  document.querySelector("strong.search-terms").innerText = message;
 });

@@ -1,6 +1,5 @@
-
-const NUM_LAYERS = 20, // number of layers
-NUM_SAMPLES = 50; // number of samples per layer
+const NUM_LAYERS = 20,
+      MIN_TOLERANCE = 0.00001;
 
 class StreamGraph {
   constructor (options) {
@@ -30,19 +29,59 @@ class StreamGraph {
     const z = d3.interpolateCool;
 
     svg.selectAll("path")
-    .data(this.layers)
-    .enter().append("path")
-    .attr("d", this.area)
-    .attr("fill", function() { return z(Math.random()); });
+      .data(this.layers)
+      .enter().append("path")
+      .attr("d", this.area)
+      .attr("fill", function() { return z(Math.random()); });
 
     this.plot = svg.append('g')
-        .attr('transform','translate(0,'+this.margin.top+')')
+      .attr('transform','translate(0,'+this.margin.top+')');
 
     this.addAxes();
   }
 
+  setData (newData) {
+    this.data = newData;
+
+    this.createLayers();
+    this.createScales();
+    this.addAxes();
+
+    this.transition();
+  }
+
+  transition (data) {
+    d3.selectAll("path")
+    .data(this.layers)
+    .transition()
+    .duration(2500)
+    .attr("d", this.area);
+  }
+
+  addAxes () {
+    d3.selectAll('g.axis').remove();
+    this.createAxes();
+
+    const m = this.margin;
+    this.plot.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(" + 0 + "," + (this.height-(m.top+m.bottom)) + ")")
+    .call(this.xAxis);
+
+    this.plot.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + m.left + "," + (-m.bottom-8) + ")")
+    .call(this.yAxis);
+
+    this.plot.append("text")
+    .attr("class", "y axis label")
+    .attr("x", 0)
+    .attr("y", (this.height-(m.top+m.bottom)) / 4)
+    .text("%");
+  }
+
   createLayers () {
-    const counts = this.data.map((d) => d.count )
+    const counts = this.data.map((d) => d.count );
     this.layers = this.stack(
       d3.transpose(d3.range(NUM_LAYERS).map(() => counts ))
     );
@@ -61,48 +100,30 @@ class StreamGraph {
     .y1((d) => this.yScale(d[1]));
   }
 
-  addAxes () {
-    d3.selectAll('g.axis').remove();
-
+  createAxes () {
     const m = this.margin,
           yrs = this.data.map((d) => d.year),
-          counts = this.data.map((d) => d.count )
+          counts = this.data.map((d) => d.count );
 
     const xAxisScale = d3.scaleLinear()
       .domain([yrs[0], yrs[yrs.length - 1]])
       .range([m.left, this.width-m.right - 15]);
 
-    const xAxis = d3.axisBottom()
+    this.xAxis = d3.axisBottom()
       .scale(xAxisScale)
       .ticks(10, "f")
       .tickSizeOuter([0]);
 
     let max = d3.max(counts);
-    if (max < 0.00001) { max = 0; }
+    if (max < MIN_TOLERANCE) { max = 0; }
     const yAxisScale = d3.scaleLinear()
       .domain([0, max])
-      .range([this.height / 2, m.bottom])
+      .range([this.height / 2, m.bottom]);
 
-    const yAxis = d3.axisLeft()
+    this.yAxis = d3.axisLeft()
       .scale(yAxisScale)
       .ticks(10)
       .tickSizeOuter([0]);
-
-    this.plot.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(" + 0 + "," + (this.height-(m.top+m.bottom)) + ")")
-      .call(xAxis);
-
-    this.plot.append("g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(" + m.left + "," + (-m.bottom-8) + ")")
-      .call(yAxis);
-
-    this.plot.append("text")
-      .attr("class", "y axis label")
-      .attr("x", 0)
-      .attr("y", (this.height-(m.top+m.bottom)) / 4)
-      .text("%");
   }
 
   createScales () {
@@ -116,31 +137,11 @@ class StreamGraph {
 
     let max = d3.max(this.layers, stackMax);
     let min = d3.min(this.layers, stackMin);
-    if (max < 0.0001) { max = 0, min = 0; }
+    if (max < MIN_TOLERANCE) { max = 0; min = 0; }
 
     this.yScale = d3.scaleLinear()
       .range([this.height-(m.top+m.bottom), 0])
-      .domain([min, max])
-  }
-
-  setData (newData) {
-    this.data = newData;
-
-    this.createLayers();
-    this.createScales();
-    this.addAxes();
-
-    this.transition();
-  }
-
-  transition (data) {
-    let layers;
-
-    d3.selectAll("path")
-    .data(layers = this.layers)
-    .transition()
-    .duration(2500)
-    .attr("d", this.area);
+      .domain([min, max]);
   }
 }
 
