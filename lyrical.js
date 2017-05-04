@@ -5,11 +5,16 @@ const wc = new WordCounter();
 
 const percentEl = document.getElementById("percent");
 const countEl = document.getElementById("count");
+const toggleInclude = document.querySelector(".toggle-include");
 
 if (wc.percent) {
   percentEl.classList.add('selected');
 } else {
   countEl.classList.add('selected');
+}
+
+if (wc.includeMax) {
+  toggleInclude.classList.add('including');
 }
 
 const sg = new StreamGraph({
@@ -34,7 +39,6 @@ submit.addEventListener('submit', (e) => {
   document.querySelector("strong.search-terms").innerText = message;
 });
 
-const toggleInclude = document.querySelector(".toggle-include");
 toggleInclude.addEventListener('click', (e) => {
   e.preventDefault();
   wc.toggleIncludeMax();
