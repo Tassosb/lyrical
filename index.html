@@ -5,6 +5,7 @@
     <title>Lyrical</title>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Arimo|Muli" rel="stylesheet">
+    <script src="https://use.fontawesome.com/871bf03501.js"></script>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/application.css">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
@@ -24,21 +25,25 @@
       <section class='options'>
         <div class="toggle">
           <div class="toggle-include switch">
-            <span>YES</span><span>NO</span>
+            <span>ON</span><span>OFF</span>
             <div class="slider"></div>
           </div>
-          <label>
-            Sometimes one song contains most occurences of the word. Choose whether or not to include the song with the highest count in each year.
-          </label>
+          <i class="toggle-info fa fa-question-circle" aria-hidden="true">
+            <label>
+              Sometimes one song contains most occurences of the word. Choose whether or not to to turn on including the song with the highest count in each year.
+            </label>
+          </i>
         </div>
         <div class="toggle">
           <div class="toggle-percent">
             <span id="percent">PERCENT</span>
             <span id="count">COUNT</span>
           </div>
-          <label>
-            Show results as word count or percent of all words. Lyrics of older songs have fewer words.
-          </label>
+          <i class="toggle-info fa fa-question-circle" aria-hidden="true">
+            <label>
+              Show results as word count or percent of all words. Lyrics of older songs generally have fewer words.
+            </label>
+          </i>
         </div>
       </section>
       <figure id='graph'>

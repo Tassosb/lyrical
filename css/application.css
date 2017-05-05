@@ -1,6 +1,6 @@
 body {
   margin: 0 auto;
-  font-family: 'Muli';
+  font-family: 'Muli', 'Arimo';
 }
 
 main {
@@ -47,7 +47,7 @@ form.search {
 }
 
 figure#graph {
-  margin-top: 20px;
+  /*margin-top: 20px;*/
   width: 960px;
   height: 500px;
 }
@@ -86,9 +86,14 @@ h2.message strong {
 
 .toggle {
   display: flex;
-  flex: 1;
+  /*flex: 1;*/
   flex-direction: row;
   align-items: flex-start;
+  justify-content: center;
+}
+
+.toggle:first-of-type {
+  margin-right: 20px;
 }
 
 .toggle span {
@@ -99,8 +104,9 @@ h2.message strong {
 .toggle-include {
   background: rgb(227, 81, 50);
   border-radius: 5px;
-  margin-right: 10px;
-  padding: 10px;
+  margin-right: 5px;
+  padding: 11px;
+  line-height: 12px;
   width: 50px;
 }
 
@@ -120,7 +126,7 @@ h2.message strong {
 .toggle-percent {
   background: rgb(50, 81, 227);
   border-radius: 5px;
-  margin: 0 10px 10px 20px;
+  margin: 0 5px 10px 20px;
   padding: 3px;
   display: flex;
   justify-content: space-around;
@@ -138,19 +144,55 @@ h2.message strong {
   color: black;
 }
 
-.toggle-percent span:hover {
+.toggle-percent span.selected:hover {
   background-color: rgb(244, 244, 244);
+}
+
+.toggle-percent span:hover {
+  background-color: rgb(50, 122, 227);
   cursor: pointer;
-  color: black;
+  /*color: black;*/
 }
 
 span#percent {
   margin-right: 5px;
 }
 
+.toggle-info {
+  position: relative;
+}
+
+.toggle-info label {
+  color: black;
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Multi', 'Arimo';
+  bottom: 20px;
+  left: -75px;
+  z-index: 666px;
+}
+
+.toggle-info:hover label {
+  display: block;
+}
+i.fa-question-circle:hover {
+  cursor: pointer;
+}
+
+i.fa-question-circle {
+  z-index: 1;
+  color: rgba(0, 0, 0, .9);
+}
+
 .options {
   width: 760px;
   display: flex;
+  justify-content: center;
   padding: 10px;
   margin-top: 10px;
   border-top: 1px solid rgb(200, 200, 200);
@@ -176,9 +218,9 @@ span#percent {
 }
 
 .toggle-include.including .slider {
-  -webkit-transform: translateX(34px);
-  -ms-transform: translateX(34px);
-  transform: translateX(34px);
+  -webkit-transform: translateX(36px);
+  -ms-transform: translateX(36px);
+  transform: translateX(36px);
 }
 
 /* Spinner */
