@@ -10,20 +10,33 @@ class WordCounter {
   }
 
   count (word) {
-    if (word) { this.targets = this.expandTarget(word); }
+    if (word) this.targets = this.expandTarget(word);
     this.current = this.newCount();
 
-    const res = this.percent ? this.asPercent() : this.asTotals();
-    return res;
+    return this.output();
   }
 
   toggleIncludeMax () {
     this.includeMax = !this.includeMax;
   }
 
-  togglePercent () {
-    this.percent = !this.percent;
+  output () {
+    const results = [];
+
+    for (let i = 1965; i < 2016; i++) {
+      let yr = this.current[i],
+          count = yr.count;
+
+      if (!this.includeMax) count -= yr.max.count;
+      if (this.percent) count /= (yr.total / 100);
+
+      results.push({year: i, count});
+    }
+
+    return results;
   }
+
+  //private methods
 
   startResults () {
     const results = {};
@@ -37,25 +50,29 @@ class WordCounter {
   expandTarget(word) {
     const targets = [removePunctuation(word.toLowerCase())];
     if (word.slice(0, -3).search(/[aeiou]/) >= 0) {
-      if (word.slice(-3) === "ing") {
+      if (word.slice(-3) === "ing")
         targets.push(word.slice(0, -1));
-      }
     }
     return targets;
   }
 
   newCount () {
-    if (this.cache[this.targets[0]]) return this.cache[this.targets[0]];
+    if (this.cache[this.targets[0]])
+      return this.cache[this.targets[0]];
+
     const results = this.startResults();
 
     lyricsData.forEach((song) => {
-      const songWords = song.Lyrics.split(" ");
-      const totalWordCount = parseInt(songWords.length);
-      const wordCount = this.wordsCount(songWords, this.targets);
-      const curr = results[song.Year];
+      const songWords = song.Lyrics.split(" "),
+            totalWordCount = parseInt(songWords.length),
+            wordCount = this.countInSong(songWords),
+            curr = results[song.Year];
 
       if (!curr.max || curr.max.count < wordCount) {
-        curr.max = {title: song.Song, artist: song.Artist, count: wordCount};
+        curr.max = {
+          title: song.Song,
+          artist: song.Artist,
+          count: wordCount};
       }
 
       curr.count += wordCount;
@@ -66,34 +83,12 @@ class WordCounter {
     return results;
   }
 
-  asTotals () {
-    return this.asArray(false);
-  }
-
-  asPercent () {
-    return this.asArray(true);
-  }
-
-  asArray () {
-    const results = [];
-
-    for (let i = 1965; i < 2016; i++) {
-      let yr = this.current[i];
-      let count = yr.count;
-      if (!this.includeMax) count -= yr.max.count;
-      if (this.percent) count /= (yr.total / 100);
-      results.push({year: i, count});
-    }
-
-    return results;
-  }
-
-  wordsCount (words, targets) {
+  countInSong (words) {
     if (this.targets[0] === "") return 0;
     let count = 0;
     for (let i = 0; i < words.length; i++) {
-      for (let j = 0; j < targets.length; j++) {
-        if (targets[j] === words[i]) count++;
+      for (let j = 0; j < this.targets.length; j++) {
+        if (this.targets[j] === words[i]) count++;
       }
     }
     return count;

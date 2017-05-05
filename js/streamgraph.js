@@ -1,6 +1,3 @@
-const NUM_LAYERS = 20,
-      MIN_TOLERANCE = 0.00001;
-
 class StreamGraph {
   constructor (options) {
     this.el = options.el;
@@ -9,12 +6,7 @@ class StreamGraph {
     this.height = options.height;
     this.percent = options.percent;
 
-    this.margin = options.margin || {
-      top: 20,
-      right: 75,
-      bottom: 45,
-      left: 65
-    };
+    this.margin = options.margin || StreamGraph.DEFAULTS.margin;
   }
 
   draw () {
@@ -51,6 +43,8 @@ class StreamGraph {
 
     this.transition();
   }
+
+  //private methods
 
   transition (data) {
     d3.selectAll("path")
@@ -91,13 +85,13 @@ class StreamGraph {
   createLayers () {
     const counts = this.data.map((d) => d.count );
     this.layers = this.stack(
-      d3.transpose(d3.range(NUM_LAYERS).map(() => counts ))
+      d3.transpose(d3.range(StreamGraph.NUM_LAYERS).map(() => counts ))
     );
   }
 
   createStack () {
     this.stack = d3.stack()
-    .keys(d3.range(NUM_LAYERS))
+    .keys(d3.range(StreamGraph.NUM_LAYERS))
     .offset(d3.stackOffsetWiggle);
   }
 
@@ -124,7 +118,7 @@ class StreamGraph {
       .tickSizeOuter([0]);
 
     let max = d3.max(counts);
-    if (max < MIN_TOLERANCE) { max = 0; }
+    if (max < StreamGraph.MIN_TOLERANCE) { max = 0; }
     const yAxisScale = d3.scaleLinear()
       .domain([0, max])
       .range([this.height / 2, m.bottom]);
@@ -146,12 +140,23 @@ class StreamGraph {
 
     let max = d3.max(this.layers, stackMax);
     let min = d3.min(this.layers, stackMin);
-    if (max < MIN_TOLERANCE) { max = 0; min = 0; }
+    if (max < StreamGraph.MIN_TOLERANCE) { max = 0; min = 0; }
 
     this.yScale = d3.scaleLinear()
       .range([this.height-(m.top+m.bottom), 0])
       .domain([min, max]);
   }
 }
+
+StreamGraph.NUM_LAYERS = 20;
+StreamGraph.MIN_TOLERANCE = 0.00001;
+StreamGraph.DEFAULTS = {
+  margin: {
+    top: 20,
+    right: 75,
+    bottom: 45,
+    left: 65
+  }
+};
 
 module.exports = StreamGraph;
