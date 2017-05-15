@@ -1,4 +1,4 @@
-const lyricsData = require('../data/lyrics_no_punctuation.json');
+const lyricsData = require('../data/compressed_data.json');
 const removePunctuation = require('./util/remove_punctuation.js');
 
 class WordCounter {
@@ -66,6 +66,7 @@ class WordCounter {
       const wordCounts = this.getWordCounts(song.Lyrics),
             curr = results[song.Year];
 
+      curr.total = 0;
       if (!curr.max || curr.max.count < wordCounts[0]) {
         curr.max = {
           title: song.Song,
