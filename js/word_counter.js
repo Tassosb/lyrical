@@ -63,35 +63,35 @@ class WordCounter {
     const results = this.startResults();
 
     lyricsData.forEach((song) => {
-      const songWords = song.Lyrics.split(" "),
-            totalWordCount = parseInt(songWords.length),
-            wordCount = this.countInSong(songWords),
+      const wordCounts = this.getWordCounts(song.Lyrics),
             curr = results[song.Year];
 
-      if (!curr.max || curr.max.count < wordCount) {
+      if (!curr.max || curr.max.count < wordCounts[0]) {
         curr.max = {
           title: song.Song,
           artist: song.Artist,
-          count: wordCount};
+          count: wordCounts[0]};
       }
 
-      curr.count += wordCount;
-      curr.total += totalWordCount;
+      curr.count += wordCounts[0];
+      curr.total += wordCounts[1];
     });
 
     this.cache[this.targets[0]] = results;
     return results;
   }
 
-  countInSong (words) {
-    if (this.targets[0] === "") return 0;
-    let count = 0;
-    for (let i = 0; i < words.length; i++) {
-      for (let j = 0; j < this.targets.length; j++) {
-        if (this.targets[j] === words[i]) count++;
+  getWordCounts (words) {
+    let total = 0,
+        count = 0;
+
+    Object.keys(words).forEach((wrd) => {
+      total += words[wrd];
+      for (let i = 0; i < this.targets.length; i++) {
+        if (this.targets[i] === wrd) count += words[wrd];
       }
-    }
-    return count;
+    });
+    return [count, total];
   }
 }
 
