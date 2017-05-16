@@ -62,6 +62,7 @@ input[type=submit] {
   background: rgb(50, 81, 227);
   border-radius: 5px;
   color: white;
+  transition: 0.4s;
 }
 
 input[type=submit]:hover {
