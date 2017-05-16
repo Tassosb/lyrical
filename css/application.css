@@ -54,6 +54,10 @@ input[name=search] {
   padding: 10px;
 }
 
+input[name=search].invalid {
+  color: red;
+}
+
 input[type=submit] {
   flex: 1;
   font-size: 28px;

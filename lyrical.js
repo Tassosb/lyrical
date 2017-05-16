@@ -1,11 +1,16 @@
+const lyricsData = require('./data/compressed_data.json');
 const WordCounter = require('./js/word_counter.js');
 const StreamGraph = require('./js/streamgraph.js');
+const InputValidator = require('./js/input_validator.js');
 
-const wc = new WordCounter();
+const wc = new WordCounter(lyricsData);
+const validator = new InputValidator(lyricsData);
 
 const percentEl = document.getElementById("percent");
 const countEl = document.getElementById("count");
 const toggleInclude = document.querySelector(".toggle-include");
+const input = document.querySelector("input[name=search]");
+const submit = document.querySelector("form.search");
 
 if (wc.percent) {
   percentEl.classList.add('selected');
@@ -25,13 +30,21 @@ const sg = new StreamGraph({
   percent: wc.percent
 });
 
-
 sg.draw();
 
-const submit = document.querySelector("form.search");
+input.addEventListener('keyup', (e) => {
+  const text = input.value
+
+  const exists = validator.validate(input.value);
+  if (!exists) {
+    input.classList.add('invalid');
+  } else {
+    input.classList.remove('invalid');
+  }
+})
+
 submit.addEventListener('submit', (e) => {
   e.preventDefault();
-  const input = document.querySelector("input[name=search]");
   const counts = wc.count(input.value, true);
   sg.setData(counts);
 

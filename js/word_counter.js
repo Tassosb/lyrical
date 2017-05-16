@@ -1,8 +1,8 @@
-const lyricsData = require('../data/compressed_data.json');
 const removePunctuation = require('./util/remove_punctuation.js');
 
 class WordCounter {
-  constructor () {
+  constructor (lyricsData) {
+    this.lyricsData = lyricsData;
     this.cache = {};
     this.current = {};
     this.includeMax = false;
@@ -62,11 +62,10 @@ class WordCounter {
 
     const results = this.startResults();
 
-    lyricsData.forEach((song) => {
+    this.lyricsData.forEach((song) => {
       const wordCounts = this.getWordCounts(song.Lyrics),
             curr = results[song.Year];
 
-      curr.total = 0;
       if (!curr.max || curr.max.count < wordCounts[0]) {
         curr.max = {
           title: song.Song,
