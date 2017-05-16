@@ -55,7 +55,7 @@ input[name=search] {
 }
 
 input[name=search].invalid {
-  color: red;
+  color: rgb(227, 81, 50);
 }
 
 input[type=submit] {
