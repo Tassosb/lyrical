@@ -87,9 +87,7 @@ class WordCounter {
 
     Object.keys(words).forEach((wrd) => {
       total += words[wrd];
-      for (let i = 0; i < this.targets.length; i++) {
-        if (this.targets[i] === wrd) count += words[wrd];
-      }
+      if (this.targets.includes(wrd)) count += words[wrd];
     });
     return [count, total];
   }
