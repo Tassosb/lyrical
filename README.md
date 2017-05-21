@@ -61,7 +61,7 @@ To help users focus on meaningful queries, Lyrical checks the existence of user 
 
 A naive approach to this validation is to iterate over the entire dataset each time, checking for matches. With a dataset of many thousands of words, this approach is expensive. Feedback may not get rendered in time before the user begins typing again.
 
-To achieve the desired feature of real-time input validation, Lyrical builds a trie data structure with the lyrics dataset upon instantiating App. The trie is a basic poly tree in which the value of each node is a letter. Words are formed by tracing down from the root node to a leaf.
+To achieve the desired feature of real-time input validation, Lyrical builds a trie data structure with the lyrics dataset upon instantiating App. The trie is a basic poly tree in which the value of each node is a letter. Words are formed by tracing down from the root node.
 For example, this simple trie:
 ```
            *
