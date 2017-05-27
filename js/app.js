@@ -6,14 +6,14 @@ const InputValidator = require('./input_validator.js');
 class App {
   constructor () {
     this.counter = new WordCounter(lyricsData);
+    this.selectElements();
+    this.setupButtons();
     this.validator = new InputValidator(lyricsData);
 
     this.setup();
   }
 
   setup () {
-    this.selectElements();
-    this.setupButtons();
     this.setupGraph();
     this.bindEvents();
   }

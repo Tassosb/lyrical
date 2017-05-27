@@ -3,7 +3,7 @@ const { Trie, TrieNode } = require('./util/trie');
 class InputValidator {
   constructor (lyricsData) {
     this.lyricsData = lyricsData;
-    this.buildTrie();
+    window.setTimeout(this.buildTrie.bind(this), 0);
   }
 
   buildTrie () {
