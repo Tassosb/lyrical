@@ -1,4 +1,5 @@
 const lyricsData = require('../data/compressed_data.json');
+// const lyricsData = [{"Song":"here", "Artist":"Alessia","Year":2015, "Lyrics":{"i":25, "guess":1}}]
 const WordCounter = require('./word_counter.js');
 const StreamGraph = require('./streamgraph.js');
 const InputValidator = require('./input_validator.js');

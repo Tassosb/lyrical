@@ -1,12 +1,7 @@
 class StreamGraph {
   constructor (options) {
-    this.el = options.el;
-    this.data = options.data;
-    this.width = options.width;
-    this.height = options.height;
+    Object.assign(this, options, StreamGraph.DEFAULTS);
     this.percent = options.percent;
-
-    this.margin = options.margin || StreamGraph.DEFAULTS.margin;
   }
 
   draw () {
@@ -20,13 +15,44 @@ class StreamGraph {
     this.createScales();
     this.createArea();
 
+    const popUp = d3.select('#graph').append('div')
+      .attr('class', 'pop-up')
+      .style('position', 'absolute')
+      .style('width', '45px')
+      .style('height', '45px')
+      .style('top', 0)
+      .style('opacity', 0)
+      .style('background', 'white')
+      .style('transition', 'opacity 0.5s')
+      .text('HI')
+
     const z = d3.interpolateCool;
+
+    const width = this.width,
+          m = this.margin,
+          that = this;
 
     svg.selectAll("path")
       .data(this.layers)
       .enter().append("path")
       .attr("d", this.area)
-      .attr("fill", function() { return z(Math.random()); });
+      .attr("fill", function() { return z(Math.random()); })
+      .on('mouseover', function(d) {
+        popUp.style('opacity', 1)
+      })
+      .on('mousemove', function(d) {
+        const mousex = d3.mouse(this)[0],
+              realWidth = width - m.left - m.right - 15,
+              i = Math.floor(((mousex - m.left) / realWidth) * 51),
+              data = d[i].data;
+              
+        popUp
+          .style('left', mousex+'px')
+          .html(`<ul><li>Year: ${data.year}<li><li>Data: ${data.count}</li></ul>`)
+      })
+      .on('mouseleave', function(d) {
+        popUp.style('opacity', 0)
+      })
 
     this.plot = svg.append('g')
       .attr('transform','translate(0,'+this.margin.top+')');
@@ -83,16 +109,28 @@ class StreamGraph {
   }
 
   createLayers () {
-    const counts = this.data.map((d) => d.count );
-    this.layers = this.stack(
-      d3.transpose(d3.range(StreamGraph.NUM_LAYERS).map(() => counts ))
+    const layerData = d3.transpose(
+      d3.range(StreamGraph.NUM_LAYERS).map(() => this.data)
     );
+    this.layers = this.stack(this.data);
+  }
+
+  getCounts() {
+    return this.data.map((d) => d.count );
+  }
+
+  getYears() {
+    if (this.years === undefined) this.years = this.data.map((d) => d.year );
+    return this.years;
   }
 
   createStack () {
     this.stack = d3.stack()
-    .keys(d3.range(StreamGraph.NUM_LAYERS))
+    .keys(['count'])
+    .order(d3.stackOrderNone)
     .offset(d3.stackOffsetWiggle);
+    // .value(d3.range(StreamGraph.NUM_LAYERS).map(() => 'count'))
+    // .keys(this.getYears())
   }
 
   createArea () {
@@ -105,8 +143,8 @@ class StreamGraph {
 
   createAxes () {
     const m = this.margin,
-          yrs = this.data.map((d) => d.year),
-          counts = this.data.map((d) => d.count );
+          yrs = this.getYears(),
+          counts = this.getCounts();
 
     const xAxisScale = d3.scaleLinear()
       .domain([yrs[0], yrs[yrs.length - 1]])

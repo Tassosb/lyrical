@@ -23,15 +23,24 @@ class WordCounter {
   output () {
     const results = [];
 
-    for (let i = 1965; i < 2016; i++) {
-      let yr = this.current[i],
-          count = yr.count;
+    Object.keys(this.current).forEach((yr) => {
+      let data = this.current[yr]
+      let count = data.count;
+      if (!this.includeMax && data.max) count -= data.max.count;
+      if (this.percent && data.total > 0) count /= (data.total / 100);
 
-      if (!this.includeMax) count -= yr.max.count;
-      if (this.percent) count /= (yr.total / 100);
+      results.push({
+        year: yr,
+        count,
+        max: data.max
+      });
+    })
 
-      results.push({year: i, count});
-    }
+    // for (let i = 1965; i < 2016; i++) {
+    //   let yr = this.current[i],
+    //       count = yr.count;
+    //
+    // }
 
     return results;
   }
