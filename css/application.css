@@ -84,6 +84,19 @@ figure#graph {
   position:relative;
 }
 
+figure#graph:hover {
+  cursor: crosshair;
+}
+
+.pop-up {
+  border: 1px solid black;
+  border-radius: 2px;
+  min-width: 150px;
+  bottom:170px;
+  padding:5px;
+  transition: opacity 0.5s;
+}
+
 .axis line {
   fill: none;
   stroke: none;

@@ -73,7 +73,7 @@ class App {
   togglePercent (bool) {
     return (e) => {
       this.counter.percent = bool;
-      this.graph.percent = bool;
+      this.graph.props.percent = bool;
       if (bool) {
         this.percentEl.classList.add('selected');
         this.countEl.classList.remove('selected');
