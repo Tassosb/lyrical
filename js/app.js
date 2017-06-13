@@ -1,20 +1,25 @@
-const lyricsData = require('../data/compressed_data.json');
+// const lyricsData = require('../data/compressed_data.json');
 // const lyricsData = [{"Song":"here", "Artist":"Alessia","Year":2015, "Lyrics":{"i":25, "guess":1}}]
+const axios = require('axios');
+
 const WordCounter = require('./word_counter.js');
 const StreamGraph = require('./streamgraph.js');
 const InputValidator = require('./input_validator.js');
 
 class App {
   constructor () {
+    axios.get('http://localhost:3000/counts')
+    .then((err, data) => {
+      this.setup(data);
+    })
+  }
+
+  setup (lyricsData) {
     this.counter = new WordCounter(lyricsData);
     this.selectElements();
     this.setupButtons();
     this.validator = new InputValidator(lyricsData);
 
-    this.setup();
-  }
-
-  setup () {
     this.setupGraph();
     this.bindEvents();
   }

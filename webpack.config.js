@@ -6,7 +6,7 @@ module.exports = {
   entry: './lyrical.js',
   output: {
     path: path.resolve(__dirname, 'js'),
-    filename: 'bundle.js',
+    filename: 'public/bundle.js',
   },
   module: {
     loaders: [
