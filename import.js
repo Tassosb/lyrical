@@ -17,9 +17,17 @@ const postLyric = (lyric) => {
   })
 }
 
+const getTotalWordCount = (lyric) => (
+  Object.values(lyric.Lyrics).reduce((sum, a) => (sum + a), 0)
+);
+
 let lyrics;
 fs.readFile(__dirname+'/data/compressed_data.json', 'utf8', (err, data) => {
   if (err) throw err;
   lyrics = JSON.parse(data);
-  lyrics.forEach((lyric) => postLyric(lyric));
+
+  lyrics.forEach((lyric) => {
+    lyric.total = getTotalWordCount(lyric);
+    postLyric(lyric)
+  });
 });
