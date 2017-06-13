@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
 
+app.use(express.static('public'));
 app.use(bodyParser.json()) // handle json data
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -9,7 +10,7 @@ const MongoClient = require('mongodb').MongoClient
 
 let db;
 
-MongoClient.connect('mongodb://tassosb:lefti248@ds125262.mlab.com:25262/lyrical', (err, database) => {
+MongoClient.connect('mongodb://tassos:123456@ds125262.mlab.com:25262/lyrical', (err, database) => {
   if (err) return console.log(err);
   db = database;
 
@@ -33,6 +34,30 @@ app.post('/lyrics', (req, res) => {
   })
 })
 
-app.get('/counts/:word', (req, res) => {
-  //query for count of words passed into req.
+app.get('/counts', (req, res) => {
+  //get all the lyrics from the database.
+  const data = db.collection('lyrics')
+    .find().toArray((err, result) => {
+      if (err) return console.log(err);
+
+      res.send(result);
+    })
 })
+//
+// app.get('/counts/:word', (req, res) => {
+//   //query for count of words passed into req.
+//   const data = db.collection('lyrics')
+//     .aggregate(
+//       [
+//         {
+//           $group: {
+//             _id: "$Year",
+//             count: { $sum: `$Lyrics.${req.params.word}` },
+//             total: { $sum: "$total" }
+//           }
+//         }
+//       ], (err, result) => {
+//     if (err) return console.log(err);
+//     res.send(result);
+//   });
+// })
