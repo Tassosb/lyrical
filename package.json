@@ -19,8 +19,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "node_modules/.bin/webpack --watch",
-    "dev": "nodemon server.js"
+    "webpack": "node_modules/.bin/webpack",
+    "watch": "node_modules/.bin/webpack --watch",
+    "dev": "nodemon server/server.js"
   },
   "keywords": [],
   "author": "",
